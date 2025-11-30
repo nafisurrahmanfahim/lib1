@@ -89,11 +89,7 @@ export default function FooterLast() {
 
       </div>
 
-      <div className="border-t border-gray-800 mt-10 py-4 text-center text-xs text-gray-500">
-        © 2022 Leather Industries of Bangladesh. All Rights Reserved.
-        <br />
-        Designed & Developed by <span className="text-white">BD WEB MART</span>
-      </div>
+   
 
     </footer>
   );
