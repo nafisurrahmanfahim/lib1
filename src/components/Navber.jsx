@@ -1,121 +1,209 @@
 import React, { useState } from "react";
-import { Sun, Moon, Menu, X } from "lucide-react";
+import { Sun, Moon, Menu, X, ChevronDown } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 
 export default function ResponsiveNavbar() {
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
+  const [mobileDropdown, setMobileDropdown] = useState(null);
 
   const menu = [
     { label: "Home", href: "#home" },
-    { label: "About us", href: "#About us" },
-    { label: "Products", href: "#Products" },
-    { label: "Other Units", href: "#Other Units" },
-    { label: "Accessory Division", href: "#Accessory Division" },
-    { label: "HR Compliance", href: "#HR Compliance" },
-    { label: "Utility", href: "#Utility" },
-    { label: "LIB CSR", href: "#LIB CSR" },
-    { label: "Logistics", href: "#Logistics" },
-    { label: "Our IT", href: "#Our IT" },
+
+    {
+      label: "Products",
+      href: "#products",
+      dropdown: [
+        { label: "Product 1", href: "#p1" },
+        { label: "Product 2", href: "#p2" },
+        { label: "Product 3", href: "#p3" },
+      ],
+    },
+
+    {
+      label: "Who we are",
+      href: "#who",
+      dropdown: [
+        { label: "About Us", href: "#about" },
+        { label: "Our Mission", href: "#mission" },
+        { label: "Team", href: "#team" },
+      ],
+    },
+
+    { label: "Blog/News", href: "#blog" },
+
+    {
+      label: "Shop",
+      href: "#shop",
+      dropdown: [
+        { label: "All Products", href: "#all" },
+        { label: "Accessories", href: "#acc" },
+      ],
+    },
+
+    { label: "Contact", href: "#contact" },
   ];
 
   return (
-    <header className="w-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-colors duration-300">
+    <header className="w-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-md shadow-sm sticky top-0 z-50 transition">
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo */}
-          {/* <div className="flex items-center">
-            <a href="#home" className="flex items-center gap-2">
-              <div className="py-2 px-5 rounded-lg bg-gradient-to-br from-red-600 to-black flex items-center justify-center text-white font-bold">
-                Manufactura
-              </div>
-              <span className="sr-only">Brand</span>
-            </a>
-          </div> */}
-
-          {/* Desktop menu - center */}
-          <div className="hidden md:flex flex-1 items-center justify-center">
-            <ul className="flex items-center gap-4 whitespace-nowrap">
+          {/* Desktop Menu */}
+          <div className="hidden md:flex flex-1 justify-center">
+            <ul className="flex items-center gap-6">
               {menu.map((m) => (
-                <li key={m.label} className="group">
-                  <a
-                    href={m.href}
-                    className="relative inline-block px-1 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 transition-all duration-300 hover:text-black dark:hover:text-white"
-                  >
+                <li key={m.label} className="relative group">
+
+                  {/* Main Button */}
+                  <button className="flex items-center gap-1 px-1 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white transition">
                     {m.label}
-                    <span className="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-gradient-to-r from-red-600 to-black transition-all duration-300 group-hover:w-full"></span>
-                  </a>
+
+                    {m.dropdown && (
+                      <ChevronDown
+                        size={16}
+                        className="transition-transform duration-200 group-hover:rotate-180"
+                      />
+                    )}
+                  </button>
+
+                  {/* Dropdown */}
+                  {m.dropdown && (
+                    <div className="
+                      absolute left-1/2 -translate-x-1/2 top-full w-44
+                      bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-lg shadow-lg
+                      opacity-0 scale-95 translate-y-2 pointer-events-none
+                      group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+                      transition-all duration-200 z-50
+                    ">
+                      <ul className="py-2">
+                        {m.dropdown.map((d) => (
+                          <li key={d.label}>
+                            <a
+                              href={d.href}
+                              className="
+                                relative block px-4 py-2 text-sm text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700 transition-all
+
+                                before:content-[''] before:absolute 
+                                before:left-0 before:top-0 before:h-full 
+                                before:w-0 before:bg-red-600 
+                                before:transition-all before:duration-200
+
+                                hover:before:w-[3px] hover:before:opacity-100
+                              "
+                            >
+                              {d.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                 </li>
               ))}
             </ul>
           </div>
 
-
-          {/* Right side */}
+          {/* Right Section */}
           <div className="flex items-center gap-4">
 
-            {/* Desktop actions */}
-            <div className="hidden md:flex items-center gap-3">
-              <a href="#shop" className="text-sm px-3 py-1 rounded-md border border-gray-200 dark:border-gray-600 hover:shadow-lg transition">
-                Shop
-              </a>
-              <a href="#contact" className="text-sm px-3 py-1 rounded-md bg-red-600 text-white hover:opacity-90 transition">
-                Contact
-              </a>
-            </div>
-
-            {/* Theme toggle */}
+            {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors"
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700"
             >
               {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
             </button>
 
-            {/* Mobile menu button */}
+            {/* Mobile Menu Button */}
             <button
-              aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen(!open)}
-              className="md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="md:hidden p-2"
             >
-              {open ? <X size={28} className="text-gray-800 dark:text-gray-200" />
-                : <Menu size={28} className="text-gray-800 dark:text-gray-200" />}
+              {open ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile menu panel */}
-        <div className={`md:hidden mt-2 origin-top-right transform transition-all duration-300 ease-in-out
-          ${open ? "max-h-[500px] opacity-100 scale-100" : "max-h-0 opacity-0 scale-95 pointer-events-none"} overflow-hidden`}>
-          <div className="bg-white/95 dark:bg-gray-900/95 rounded-xl shadow-lg p-4 transition-colors duration-300">
-            <ul className="flex flex-col gap-3">
-              {menu.map((m) => (
+        {/* Mobile Menu */}
+        <div
+          className={`md:hidden mt-2 transition-all duration-300 overflow-hidden ${
+            open ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4">
+
+            <ul className="flex flex-col gap-2">
+              {menu.map((m, index) => (
                 <li key={m.label}>
-                  <a
-                    href={m.href}
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 rounded-md text-gray-800 dark:text-gray-200 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                  >
-                    {m.label}
-                  </a>
+
+                  <div className="flex items-center justify-between">
+                    <a
+                      href={m.href}
+                      className="px-3 py-2 text-gray-800 dark:text-gray-200 font-medium"
+                    >
+                      {m.label}
+                    </a>
+
+                    {m.dropdown && (
+                      <button
+                        onClick={() =>
+                          setMobileDropdown(
+                            mobileDropdown === index ? null : index
+                          )
+                        }
+                      >
+                        <ChevronDown
+                          size={18}
+                          className={`transition ${
+                            mobileDropdown === index ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    )}
+                  </div>
+
+                  {m.dropdown && (
+                    <div
+                      className={`
+                        pl-4 transition-all overflow-hidden
+                        ${
+                          mobileDropdown === index
+                            ? "max-h-40 opacity-100"
+                            : "max-h-0 opacity-0"
+                        }
+                      `}
+                    >
+                      {m.dropdown.map((d) => (
+                        <a
+                          key={d.label}
+                          href={d.href}
+                          className="block py-1 text-sm text-gray-600 dark:text-gray-300"
+                        >
+                          {d.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+
                 </li>
               ))}
             </ul>
 
-            {/* Footer */}
-            <div className="mt-4 flex items-center justify-between">
-              <div className="text-xs text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} Company</div>
+            <div className="mt-4 flex justify-between text-xs text-gray-500 dark:text-gray-400">
+              <div>© {new Date().getFullYear()} Company</div>
               <button
                 onClick={() => setOpen(false)}
-                className="text-sm px-3 py-1 rounded-md border border-gray-200 dark:border-gray-600 hover:shadow-sm transition"
+                className="px-3 py-1 border rounded-md text-sm"
               >
                 Close
               </button>
             </div>
+
           </div>
         </div>
-
       </nav>
     </header>
   );
